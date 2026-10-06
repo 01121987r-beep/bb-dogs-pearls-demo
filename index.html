@@ -11,8 +11,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
     <link rel="preload" as="image" href="assets/images/guinzaglio-montagna.webp">
-    <link rel="stylesheet" href="styles.css?v=20261006-6">
-    <script src="script.js?v=20261006-3" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261006-7">
+    <script src="script.js?v=20261006-4" defer></script>
   </head>
   <body class="intro-active">
     <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -104,6 +104,7 @@
             <p class="craft-lead">Cordini, colori e piccoli dettagli: ogni elemento trova il suo posto, un intreccio alla volta.</p>
             <p>Scelgo le tonalità, le accosto e le intreccio con pazienza. Il gesto si ripete, ma il risultato cambia sempre: basta una sfumatura diversa per dare a un collare o a un guinzaglio una personalità tutta sua.</p>
             <p>Mi piace soffermarmi sui nodi, sulle finiture e su quei particolari che spesso si notano solo da vicino. È lì che un accessorio comincia a raccontare la storia di chi lo indosserà.</p>
+            <button class="hero-cta craft-cta" id="info-open" type="button" aria-haspopup="dialog" aria-controls="info-dialog"><span>Voglio saperne di più</span></button>
           </div>
           <div class="craft-visuals reveal">
             <img class="craft-process" src="assets/images/lavorazione-cordino.webp" alt="Mani che annodano un cordino azzurro, immagine illustrativa della lavorazione" width="1100" height="729" loading="lazy">
@@ -207,6 +208,26 @@
       </div>
       <div class="footer-bottom"><span>© B B Dogs Pearls</span><span>Proposta visuale</span></div>
     </footer>
+
+    <dialog class="info-dialog" id="info-dialog" aria-labelledby="info-title" aria-describedby="info-description">
+      <div class="info-dialog-heading">
+        <p class="eyebrow">Una domanda per me?</p>
+        <button class="info-close" id="info-close" type="button" aria-label="Chiudi il modulo"><span aria-hidden="true">×</span></button>
+      </div>
+      <h2 id="info-title">Parliamo di <em>ogni dettaglio.</em></h2>
+      <p class="info-description" id="info-description">Materiali, intrecci o personalizzazioni: raccontami cosa vorresti sapere.</p>
+      <form id="info-form" method="post" action="#artigianalita">
+        <div class="form-row">
+          <label class="form-field" for="info-name"><span>Il tuo nome <b aria-hidden="true">*</b></span><input id="info-name" name="name" type="text" autocomplete="name" placeholder="Come ti chiami?" required></label>
+          <label class="form-field" for="info-email"><span>La tua email <b aria-hidden="true">*</b></span><input id="info-email" name="email" type="email" autocomplete="email" placeholder="nome@esempio.it" required></label>
+        </div>
+        <label class="form-field" for="info-topic"><span>Vorrei sapere di più su</span><select id="info-topic" name="topic"><option value="">Scegli, se vuoi</option><option value="Materiali">Materiali</option><option value="Lavorazione">Lavorazione</option><option value="Personalizzazioni">Personalizzazioni</option><option value="Altro">Altro</option></select></label>
+        <label class="form-field" for="info-message"><span>La tua domanda <b aria-hidden="true">*</b></span><textarea id="info-message" name="message" rows="4" placeholder="Scrivimi quello che vorresti sapere..." required></textarea></label>
+        <div class="form-bottom"><span>* Campi obbligatori</span><button class="form-submit" type="submit">Invia richiesta</button></div>
+        <p class="info-delivery-note">Invio disponibile quando sarà collegata l'email del brand.</p>
+        <p class="form-status" id="info-form-status" role="status" aria-live="polite" hidden></p>
+      </form>
+    </dialog>
 
     <div class="whatsapp-float" id="whatsapp-float">
       <div class="whatsapp-note" id="whatsapp-note" role="status" hidden>Il collegamento WhatsApp sarà disponibile nella versione finale.</div>

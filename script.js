@@ -235,6 +235,35 @@ contactForm?.addEventListener('submit', event => {
   formStatus.hidden = false;
 });
 
+const infoOpen = document.querySelector('#info-open');
+const infoDialog = document.querySelector('#info-dialog');
+const infoClose = document.querySelector('#info-close');
+const infoForm = document.querySelector('#info-form');
+const infoFormStatus = document.querySelector('#info-form-status');
+
+infoOpen?.addEventListener('click', () => {
+  infoFormStatus.hidden = true;
+  infoDialog.showModal();
+  document.body.classList.add('modal-open');
+  document.querySelector('#info-name').focus();
+});
+infoClose?.addEventListener('click', () => infoDialog.close());
+infoDialog?.addEventListener('click', event => {
+  if (event.target !== infoDialog) return;
+  const box = infoDialog.getBoundingClientRect();
+  if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) infoDialog.close();
+});
+infoDialog?.addEventListener('close', () => {
+  document.body.classList.remove('modal-open');
+  infoOpen.focus();
+});
+infoForm?.addEventListener('submit', event => {
+  event.preventDefault();
+  if (!infoForm.reportValidity()) return;
+  infoFormStatus.textContent = 'La richiesta è pronta. Per inviarla manca ancora l’indirizzo email di destinazione.';
+  infoFormStatus.hidden = false;
+});
+
 tabs.forEach((tab, index) => {
   tab.addEventListener('click', () => selectProduct(tab));
   tab.addEventListener('keydown', event => {

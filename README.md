@@ -19,7 +19,7 @@ Quindi aprire `http://127.0.0.1:4173/`.
 - Le due immagini illustrative della sezione materiali provengono da Pexels: [Diana Onfilm, mani che annodano un cordino](https://www.pexels.com/photo/woman-doing-knots-on-a-rope-8771036/) e [Pixabay, dettaglio di cordino blu e bianco](https://www.pexels.com/photo/blue-and-white-rope-in-bundle-on-white-table-45873/). Non raffigurano il laboratorio o i materiali effettivi di B B Dogs Pearls.
 - Introduzione animata con possibilità di saltarla e rispetto di `prefers-reduced-motion`.
 - Menu mobile, navigazione ad ancore e cinque schede prodotto selezionabili anche con la tastiera. Ogni scheda ha un carosello di fotografie con pallini cliccabili; lo scorrimento automatico si ferma quando il carosello è in uso e rispetta `prefers-reduced-motion`.
-- Il pulsante “Ordina” e il form di contatto sono pronti nell'interfaccia, ma l'invio richiede ancora il numero WhatsApp e la scelta del canale di recapito del form.
+- Il pulsante “Ordina”, il form di contatto e il popup “Voglio saperne di più” sono pronti nell'interfaccia. L'invio richiede ancora il numero WhatsApp e un indirizzo email di destinazione per i moduli.
 - Testi narrativi dimostrativi da validare con l'artigiana prima della pubblicazione.
 - Icone social nell'header; icone social, WhatsApp, telefono ed email nei Contatti e nel footer; pulsante WhatsApp fluttuante. I collegamenti esterni e i recapiti restano in preparazione finché non vengono forniti quelli del cliente.
 
