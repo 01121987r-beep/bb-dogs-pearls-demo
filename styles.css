@@ -86,7 +86,8 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
 .story-image-wrap { height: clamp(460px, 47vw, 650px); overflow: hidden; background: #c7b69f; }
 .story-image-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 51%; transition: transform .6s ease; }
 .story-image-wrap:hover img { transform: scale(1.04); }
-.hand-note { position: absolute; left: -58px; bottom: 42px; padding: 14px 22px; background: var(--ivory); color: var(--mocha); font-family: var(--hand); font-size: 24px; transform: rotate(-8deg); }
+.hand-note { position: absolute; right: 24px; bottom: 32px; color: white; font-family: var(--hand); font-size: 25px; white-space: nowrap; text-shadow: 0 1px 14px rgba(0,0,0,.7); transform: rotate(-5deg); }
+.hand-note::before { content: "✳"; margin-right: 9px; font-family: var(--body); font-size: .9em; }
 
 .craft { background: var(--sand); overflow: hidden; }
 .craft-layout { width: min(100%, 1260px); margin: 0 auto; display: grid; grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr); align-items: center; gap: clamp(65px, 9vw, 150px); }
@@ -162,12 +163,13 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
 .form-status[hidden] { display: none; }
 
 .info-dialog { width: min(700px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 32px); margin: auto; overflow-y: auto; padding: clamp(28px, 4vw, 50px); border: 1px solid var(--taupe); background: var(--ivory); color: var(--ink); box-shadow: 0 28px 80px rgba(48,41,35,.22); }
+.info-dialog:focus { outline: none; }
 .info-dialog::backdrop { background: rgba(48,41,35,.58); backdrop-filter: blur(5px); }
 .info-dialog-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
 .info-dialog h2 { max-width: 540px; margin: 12px 0 16px; font-size: clamp(43px, 5vw, 65px); }
 .info-description { max-width: 460px; margin: 0 0 31px; color: var(--muted); font-size: 15px; line-height: 1.65; }
-.info-close { display: grid; flex: 0 0 auto; place-items: center; width: 39px; height: 39px; margin: -8px -8px 0 0; padding: 0; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 30px; line-height: 1; cursor: pointer; transition: background-color .2s, transform .2s; }
-.info-close:hover { background: var(--sand); transform: rotate(90deg); }
+.info-close { display: grid; flex: 0 0 auto; place-items: center; width: 44px; height: 44px; margin: -10px -10px 0 0; padding: 0; border: 0; background: transparent; color: var(--ink); font-size: 32px; line-height: 1; cursor: pointer; transition: color .2s, transform .2s; }
+.info-close:hover { color: #9f7255; transform: rotate(90deg); }
 .info-dialog .form-field { margin-bottom: 21px; }
 .info-dialog .form-field textarea { min-height: 95px; }
 .info-delivery-note { margin: 15px 0 0; color: var(--mocha); font-size: 11px; line-height: 1.5; }
@@ -265,14 +267,15 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
   .story h2 em { white-space: normal; }
   .story-media { justify-self: center; width: min(85%, 420px); }
   .story-image-wrap { height: 500px; }
-  .hand-note { left: -25px; font-size: 22px; }
+  .hand-note { right: 16px; bottom: 24px; font-size: 22px; }
   .craft-layout { grid-template-columns: 1fr; gap: 55px; }
   .craft-copy h2 { font-size: clamp(50px, 9vw, 68px); }
   .craft-visuals { width: min(100%, 600px); min-height: 0; margin: 0 auto; padding-left: 55px; padding-bottom: 58px; }
   .craft-process-frame { height: 440px; }
   .craft-material-frame { width: 48%; height: 195px; bottom: 27px; }
   .shop-heading h2 br { display: none; }
-  .product-picker { margin: 45px -28px 42px; padding: 0 28px 10px; width: calc(100% + 56px); justify-content: flex-start; gap: 17px; overflow-x: auto; scrollbar-width: thin; }
+  .product-picker { margin: 45px -28px 42px; padding: 0 28px 10px; width: calc(100% + 56px); justify-content: flex-start; gap: 17px; overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .product-picker::-webkit-scrollbar { display: none; }
   .product-tab { min-width: 92px; flex: 0 0 auto; }
   .product-tab .product-thumb { width: 78px; height: 78px; }
   .product-panel { display: flex; flex-direction: column; min-height: 0; }
@@ -284,6 +287,17 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
   .contact h2 { font-size: clamp(57px, 10vw, 78px); }
   .contact-channels { margin-top: 27px; }
   .contact-form { max-width: 560px; padding-top: 0; }
+  .info-dialog { width: min(520px, calc(100vw - 24px)); height: min(580px, calc(100dvh - 24px)); max-height: none; padding: 20px 22px; overflow: hidden; }
+  .info-dialog h2 { margin: 4px 0 8px; font-size: clamp(34px, 6vw, 42px); line-height: 1.04; }
+  .info-description { margin-bottom: 12px; font-size: 13px; line-height: 1.4; }
+  .info-dialog .form-row { gap: 12px; }
+  .info-dialog .form-field { gap: 2px; margin-bottom: 11px; }
+  .info-dialog .form-field > span { font-size: 11px; }
+  .info-dialog .form-field input, .info-dialog .form-field select, .info-dialog .form-field textarea { min-height: 34px; padding: 4px 0 6px; font-size: 16px; }
+  .info-dialog .form-field textarea { min-height: 62px; max-height: 62px; resize: none; }
+  .info-dialog .form-bottom { flex-direction: row; align-items: center; margin-top: 0; }
+  .info-dialog .form-submit { min-height: 41px; padding: 8px 18px; }
+  .info-delivery-note { margin-top: 9px; }
   .site-footer { padding: 70px 28px 24px; }
   .footer-main { grid-template-columns: 1fr 1fr; gap: 48px 28px; padding-bottom: 65px; }
   .footer-identity { grid-column: 1 / -1; }
@@ -314,10 +328,21 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
   .product-copy h3 { font-size: 46px; }
   .form-row { grid-template-columns: 1fr; gap: 0; }
   .form-bottom { align-items: flex-start; flex-direction: column; }
-  .info-dialog { max-height: calc(100dvh - 20px); padding: 26px 24px 30px; }
-  .info-dialog h2 { font-size: 44px; }
-  .info-dialog .form-field { margin-bottom: 15px; }
-  .info-dialog .form-field textarea { min-height: 86px; }
+  .info-dialog { padding: 18px 18px; }
+  .info-dialog h2 { font-size: 36px; }
+}
+
+@media (max-width: 760px) and (max-height: 600px) {
+  .info-dialog { padding-block: 14px; }
+  .info-dialog h2 { font-size: 32px; margin-bottom: 5px; }
+  .info-description { margin-bottom: 8px; }
+  .info-dialog .form-field { margin-bottom: 7px; }
+  .info-dialog .form-field textarea { min-height: 52px; max-height: 52px; }
+  .info-delivery-note { margin-top: 5px; }
+}
+
+@media (max-width: 760px) and (max-height: 520px) {
+  .info-dialog { overflow-y: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {

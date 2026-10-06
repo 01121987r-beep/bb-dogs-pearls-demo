@@ -141,6 +141,7 @@ const photos = {
 };
 
 const tabs = [...document.querySelectorAll('.product-tab')];
+const productPicker = document.querySelector('.product-picker');
 const panel = document.querySelector('#product-panel');
 const productPhoto = document.querySelector('#product-photo');
 const productImage = document.querySelector('#product-image');
@@ -199,6 +200,9 @@ function selectProduct(tab, focus = false) {
     item.setAttribute('aria-selected', String(selected));
     item.tabIndex = selected ? 0 : -1;
   });
+  productPicker.querySelectorAll('[data-carousel-copy]').forEach(item => {
+    item.classList.toggle('is-active', item.dataset.product === tab.dataset.product);
+  });
   panel.setAttribute('aria-labelledby', tab.id);
   document.querySelector('#product-overline').textContent = product.overline;
   document.querySelector('#product-title').textContent = product.title;
@@ -233,6 +237,109 @@ productPhoto.addEventListener('focusin', () => { carouselPaused = true; stopCaro
 productPhoto.addEventListener('focusout', () => { carouselPaused = false; startCarousel(); });
 document.addEventListener('visibilitychange', startCarousel);
 
+const mobilePicker = window.matchMedia('(max-width: 760px)');
+let pickerCopies = [];
+let pickerCycleWidth = 0;
+let pickerStepWidth = 0;
+let pickerVisible = false;
+let pickerPaused = false;
+let pickerTimer;
+let pickerResumeTimer;
+
+function stopPickerCarousel() {
+  window.clearInterval(pickerTimer);
+  pickerTimer = undefined;
+}
+
+function normalizePickerScroll() {
+  if (!pickerCycleWidth) return;
+  if (productPicker.scrollLeft < pickerCycleWidth * .5) productPicker.scrollLeft += pickerCycleWidth;
+  if (productPicker.scrollLeft > pickerCycleWidth * 1.5) productPicker.scrollLeft -= pickerCycleWidth;
+}
+
+function startPickerCarousel() {
+  stopPickerCarousel();
+  if (!mobilePicker.matches || !pickerVisible || pickerPaused || reducedMotion.matches || document.hidden) return;
+  pickerTimer = window.setInterval(() => {
+    productPicker.scrollBy({ left: pickerStepWidth, behavior: 'smooth' });
+  }, 4300);
+}
+
+function pausePickerCarousel(delay = 0) {
+  stopPickerCarousel();
+  window.clearTimeout(pickerResumeTimer);
+  pickerPaused = true;
+  if (delay) pickerResumeTimer = window.setTimeout(() => {
+    pickerPaused = false;
+    normalizePickerScroll();
+    startPickerCarousel();
+  }, delay);
+}
+
+function setupPickerCarousel() {
+  stopPickerCarousel();
+  pickerCopies.forEach(copy => copy.remove());
+  pickerCopies = [];
+  pickerCycleWidth = 0;
+  pickerStepWidth = 0;
+  if (!mobilePicker.matches) {
+    productPicker.scrollLeft = 0;
+    return;
+  }
+  const makeCopy = tab => {
+    const copy = tab.cloneNode(true);
+    copy.removeAttribute('id');
+    copy.removeAttribute('role');
+    copy.removeAttribute('aria-selected');
+    copy.removeAttribute('aria-controls');
+    copy.setAttribute('aria-hidden', 'true');
+    copy.setAttribute('tabindex', '-1');
+    copy.dataset.carouselCopy = '';
+    copy.addEventListener('click', () => {
+      selectProduct(tab);
+      pausePickerCarousel(2500);
+    });
+    pickerCopies.push(copy);
+    return copy;
+  };
+  const before = tabs.map(makeCopy);
+  const after = tabs.map(makeCopy);
+  productPicker.prepend(...before);
+  productPicker.append(...after);
+  pickerCycleWidth = tabs[0].offsetLeft - before[0].offsetLeft;
+  pickerStepWidth = tabs[1].offsetLeft - tabs[0].offsetLeft;
+  productPicker.scrollLeft = pickerCycleWidth;
+  startPickerCarousel();
+}
+
+productPicker.addEventListener('scroll', normalizePickerScroll, { passive: true });
+productPicker.addEventListener('pointerdown', () => pausePickerCarousel(), { passive: true });
+productPicker.addEventListener('pointerup', () => pausePickerCarousel(2500), { passive: true });
+productPicker.addEventListener('pointercancel', () => pausePickerCarousel(2500), { passive: true });
+productPicker.addEventListener('wheel', () => pausePickerCarousel(2500), { passive: true });
+productPicker.addEventListener('focusin', () => pausePickerCarousel());
+productPicker.addEventListener('focusout', () => pausePickerCarousel(2500));
+mobilePicker.addEventListener('change', setupPickerCarousel);
+reducedMotion.addEventListener('change', startPickerCarousel);
+document.addEventListener('visibilitychange', startPickerCarousel);
+window.addEventListener('resize', () => {
+  if (mobilePicker.matches && pickerCopies.length) {
+    pickerCycleWidth = tabs[0].offsetLeft - pickerCopies[0].offsetLeft;
+    pickerStepWidth = tabs[1].offsetLeft - tabs[0].offsetLeft;
+  }
+}, { passive: true });
+if ('IntersectionObserver' in window) {
+  const pickerObserver = new IntersectionObserver(([entry]) => {
+    pickerVisible = entry.isIntersecting;
+    if (pickerVisible) startPickerCarousel();
+    else stopPickerCarousel();
+  }, { threshold: .15 });
+  pickerObserver.observe(productPicker);
+} else {
+  pickerVisible = true;
+}
+setupPickerCarousel();
+
 const orderButton = document.querySelector('#order-button');
 const orderStatus = document.querySelector('#order-status');
 orderButton?.addEventListener('click', () => {
@@ -259,12 +366,15 @@ const infoDialog = document.querySelector('#info-dialog');
 const infoClose = document.querySelector('#info-close');
 const infoForm = document.querySelector('#info-form');
 const infoFormStatus = document.querySelector('#info-form-status');
+const infoDeliveryNote = document.querySelector('.info-delivery-note');
 
 infoOpen?.addEventListener('click', () => {
   infoFormStatus.hidden = true;
+  infoDeliveryNote.hidden = false;
   infoDialog.showModal();
   document.body.classList.add('modal-open');
-  document.querySelector('#info-name').focus();
+  if (mobilePicker.matches) infoDialog.focus({ preventScroll: true });
+  else document.querySelector('#info-name').focus();
 });
 infoClose?.addEventListener('click', () => infoDialog.close());
 infoDialog?.addEventListener('click', event => {
@@ -280,6 +390,7 @@ infoForm?.addEventListener('submit', event => {
   event.preventDefault();
   if (!infoForm.reportValidity()) return;
   infoFormStatus.textContent = 'La richiesta è pronta. Per inviarla manca ancora l’indirizzo email di destinazione.';
+  infoDeliveryNote.hidden = true;
   infoFormStatus.hidden = false;
 });
 
