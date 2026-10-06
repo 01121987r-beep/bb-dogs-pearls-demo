@@ -246,16 +246,21 @@ document.addEventListener('visibilitychange', startCarousel);
 const mobilePicker = window.matchMedia('(max-width: 760px)');
 let pickerCopies = [];
 let pickerCycleWidth = 0;
-let pickerStepWidth = 0;
 let pickerVisible = false;
 let pickerPaused = false;
-let pickerTimer;
+let pickerFrame = 0;
+let pickerLastFrame = 0;
+let pickerPosition = 0;
+let pickerAnimating = false;
 let pickerResumeTimer;
 let pickerIndicatorTimer;
 
 function stopPickerCarousel() {
-  window.clearInterval(pickerTimer);
-  pickerTimer = undefined;
+  window.cancelAnimationFrame(pickerFrame);
+  pickerFrame = 0;
+  pickerLastFrame = 0;
+  pickerAnimating = false;
+  pickerPosition = productPicker.scrollLeft;
 }
 
 function normalizePickerScroll() {
@@ -282,12 +287,24 @@ function hidePickerIndicator() {
   pickerIndicatorTimer = window.setTimeout(() => pickerIndicator.classList.remove('is-visible'), 1300);
 }
 
+function advancePicker(time) {
+  if (!pickerAnimating) return;
+  if (pickerLastFrame) {
+    pickerPosition += Math.min(time - pickerLastFrame, 64) * .014;
+    if (pickerPosition >= pickerCycleWidth * 1.5) pickerPosition -= pickerCycleWidth;
+    productPicker.scrollLeft = pickerPosition;
+  }
+  pickerLastFrame = time;
+  pickerFrame = window.requestAnimationFrame(advancePicker);
+}
+
 function startPickerCarousel() {
   stopPickerCarousel();
   if (!mobilePicker.matches || !pickerVisible || pickerPaused || reducedMotion.matches || document.hidden) return;
-  pickerTimer = window.setInterval(() => {
-    productPicker.scrollBy({ left: pickerStepWidth, behavior: 'smooth' });
-  }, 4300);
+  normalizePickerScroll();
+  pickerPosition = productPicker.scrollLeft;
+  pickerAnimating = true;
+  pickerFrame = window.requestAnimationFrame(advancePicker);
 }
 
 function pausePickerCarousel(delay = 0) {
@@ -306,7 +323,6 @@ function setupPickerCarousel() {
   pickerCopies.forEach(copy => copy.remove());
   pickerCopies = [];
   pickerCycleWidth = 0;
-  pickerStepWidth = 0;
   if (!mobilePicker.matches) {
     productPicker.scrollLeft = 0;
     pickerIndicator.classList.remove('is-visible');
@@ -333,14 +349,17 @@ function setupPickerCarousel() {
   productPicker.prepend(...before);
   productPicker.append(...after);
   pickerCycleWidth = tabs[0].offsetLeft - before[0].offsetLeft;
-  pickerStepWidth = tabs[1].offsetLeft - tabs[0].offsetLeft;
   productPicker.scrollLeft = pickerCycleWidth;
+  pickerPosition = pickerCycleWidth;
   updatePickerIndicator();
   startPickerCarousel();
 }
 
 productPicker.addEventListener('scroll', () => {
-  normalizePickerScroll();
+  if (!pickerAnimating) {
+    normalizePickerScroll();
+    pickerPosition = productPicker.scrollLeft;
+  }
   updatePickerIndicator();
 }, { passive: true });
 productPicker.addEventListener('pointerdown', () => {
@@ -368,7 +387,7 @@ document.addEventListener('visibilitychange', startPickerCarousel);
 window.addEventListener('resize', () => {
   if (mobilePicker.matches && pickerCopies.length) {
     pickerCycleWidth = tabs[0].offsetLeft - pickerCopies[0].offsetLeft;
-    pickerStepWidth = tabs[1].offsetLeft - tabs[0].offsetLeft;
+    if (!pickerAnimating) pickerPosition = productPicker.scrollLeft;
   }
 }, { passive: true });
 if ('IntersectionObserver' in window) {
