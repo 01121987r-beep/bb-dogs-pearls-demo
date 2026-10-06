@@ -142,6 +142,8 @@ const photos = {
 
 const tabs = [...document.querySelectorAll('.product-tab')];
 const productPicker = document.querySelector('.product-picker');
+const pickerIndicator = document.querySelector('#product-scroll-indicator');
+const pickerIndicatorThumb = pickerIndicator.querySelector('span');
 const panel = document.querySelector('#product-panel');
 const productPhoto = document.querySelector('#product-photo');
 const productImage = document.querySelector('#product-image');
@@ -245,6 +247,7 @@ let pickerVisible = false;
 let pickerPaused = false;
 let pickerTimer;
 let pickerResumeTimer;
+let pickerIndicatorTimer;
 
 function stopPickerCarousel() {
   window.clearInterval(pickerTimer);
@@ -255,6 +258,24 @@ function normalizePickerScroll() {
   if (!pickerCycleWidth) return;
   if (productPicker.scrollLeft < pickerCycleWidth * .5) productPicker.scrollLeft += pickerCycleWidth;
   if (productPicker.scrollLeft > pickerCycleWidth * 1.5) productPicker.scrollLeft -= pickerCycleWidth;
+}
+
+function updatePickerIndicator() {
+  if (!pickerCycleWidth) return;
+  const position = ((productPicker.scrollLeft % pickerCycleWidth) + pickerCycleWidth) % pickerCycleWidth;
+  pickerIndicatorThumb.style.left = `${position / pickerCycleWidth * 70}%`;
+}
+
+function showPickerIndicator() {
+  if (!mobilePicker.matches) return;
+  window.clearTimeout(pickerIndicatorTimer);
+  updatePickerIndicator();
+  pickerIndicator.classList.add('is-visible');
+}
+
+function hidePickerIndicator() {
+  window.clearTimeout(pickerIndicatorTimer);
+  pickerIndicatorTimer = window.setTimeout(() => pickerIndicator.classList.remove('is-visible'), 1300);
 }
 
 function startPickerCarousel() {
@@ -284,6 +305,7 @@ function setupPickerCarousel() {
   pickerStepWidth = 0;
   if (!mobilePicker.matches) {
     productPicker.scrollLeft = 0;
+    pickerIndicator.classList.remove('is-visible');
     return;
   }
   const makeCopy = tab => {
@@ -309,14 +331,31 @@ function setupPickerCarousel() {
   pickerCycleWidth = tabs[0].offsetLeft - before[0].offsetLeft;
   pickerStepWidth = tabs[1].offsetLeft - tabs[0].offsetLeft;
   productPicker.scrollLeft = pickerCycleWidth;
+  updatePickerIndicator();
   startPickerCarousel();
 }
 
-productPicker.addEventListener('scroll', normalizePickerScroll, { passive: true });
-productPicker.addEventListener('pointerdown', () => pausePickerCarousel(), { passive: true });
-productPicker.addEventListener('pointerup', () => pausePickerCarousel(2500), { passive: true });
-productPicker.addEventListener('pointercancel', () => pausePickerCarousel(2500), { passive: true });
-productPicker.addEventListener('wheel', () => pausePickerCarousel(2500), { passive: true });
+productPicker.addEventListener('scroll', () => {
+  normalizePickerScroll();
+  updatePickerIndicator();
+}, { passive: true });
+productPicker.addEventListener('pointerdown', () => {
+  pausePickerCarousel();
+  showPickerIndicator();
+}, { passive: true });
+productPicker.addEventListener('pointerup', () => {
+  pausePickerCarousel(2500);
+  hidePickerIndicator();
+}, { passive: true });
+productPicker.addEventListener('pointercancel', () => {
+  pausePickerCarousel(2500);
+  hidePickerIndicator();
+}, { passive: true });
+productPicker.addEventListener('wheel', () => {
+  pausePickerCarousel(2500);
+  showPickerIndicator();
+  hidePickerIndicator();
+}, { passive: true });
 productPicker.addEventListener('focusin', () => pausePickerCarousel());
 productPicker.addEventListener('focusout', () => pausePickerCarousel(2500));
 mobilePicker.addEventListener('change', setupPickerCarousel);
