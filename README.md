@@ -19,6 +19,6 @@ Quindi aprire `http://127.0.0.1:4173/`.
 - Introduzione animata con possibilità di saltarla e rispetto di `prefers-reduced-motion`.
 - Menu mobile, navigazione ad ancore e cinque schede prodotto selezionabili anche con la tastiera.
 - Testi narrativi dimostrativi da validare con l'artigiana prima della pubblicazione.
-- Social e WhatsApp visibili come elementi di progetto, senza collegamenti attivi per ora.
+- Icone social nell'header e pulsante WhatsApp fluttuante come elementi di progetto, senza collegamenti esterni attivi per ora. Il pulsante mostra un avviso al tocco.
 
 Questa è una proposta visuale, non uno shop operativo. La versione finale richiederà contenuti approvati, recapiti, link social e l'eventuale implementazione delle funzioni di vendita.

@@ -43,8 +43,29 @@ menuToggle?.addEventListener('click', () => {
   siteHeader.classList.toggle('is-menu-open', open);
 });
 primaryNav?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+
+const whatsappFloat = document.querySelector('#whatsapp-float');
+const whatsappButton = document.querySelector('#whatsapp-button');
+const whatsappNote = document.querySelector('#whatsapp-note');
+
+function closeWhatsAppNote() {
+  whatsappNote.hidden = true;
+  whatsappButton.setAttribute('aria-expanded', 'false');
+}
+
+whatsappButton?.addEventListener('click', () => {
+  const open = whatsappNote.hidden;
+  whatsappNote.hidden = !open;
+  whatsappButton.setAttribute('aria-expanded', String(open));
+});
+document.addEventListener('click', event => {
+  if (!whatsappFloat.contains(event.target)) closeWhatsAppNote();
+});
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') closeMenu();
+  if (event.key === 'Escape') {
+    closeMenu();
+    closeWhatsAppNote();
+  }
 });
 
 const products = {
