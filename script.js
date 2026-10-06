@@ -13,7 +13,7 @@ function closeIntro() {
 if (reducedMotion.matches) {
   closeIntro();
 } else {
-  window.setTimeout(closeIntro, 2200);
+  window.setTimeout(closeIntro, 4300);
 }
 skipIntro?.addEventListener('click', closeIntro);
 
