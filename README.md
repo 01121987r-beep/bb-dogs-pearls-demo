@@ -21,6 +21,6 @@ Quindi aprire `http://127.0.0.1:4173/`.
 - Menu mobile, navigazione ad ancore e cinque schede prodotto selezionabili anche con la tastiera. Ogni scheda ha un carosello di fotografie con pallini cliccabili; lo scorrimento automatico si ferma quando il carosello è in uso e rispetta `prefers-reduced-motion`.
 - Il pulsante “Ordina”, il form di contatto e il popup “Voglio saperne di più” sono pronti nell'interfaccia. L'invio richiede ancora il numero WhatsApp e un indirizzo email di destinazione per i moduli.
 - Testi narrativi dimostrativi da validare con l'artigiana prima della pubblicazione.
-- Icone social nell'header; icone social, WhatsApp, telefono ed email nei Contatti e nel footer; pulsante WhatsApp fluttuante. I collegamenti esterni e i recapiti restano in preparazione finché non vengono forniti quelli del cliente.
+- Icone social nell'header; icone social, WhatsApp, telefono ed email nei Contatti e nel footer; pulsante WhatsApp fluttuante. Le icone reagiscono al passaggio del mouse e al focus e, al clic, mostrano un avviso: i collegamenti esterni e i recapiti restano in preparazione finché non vengono forniti quelli del cliente.
 
 Questa è una proposta visuale, non uno shop operativo. La versione finale richiederà contenuti approvati, recapiti, link social e l'eventuale implementazione delle funzioni di vendita.
