@@ -19,11 +19,20 @@ skipIntro?.addEventListener('click', closeIntro);
 
 const menuToggle = document.querySelector('#menu-toggle');
 const primaryNav = document.querySelector('#primary-nav');
+const siteHeader = document.querySelector('#site-header');
+
+function updateHeader() {
+  siteHeader.classList.toggle('is-scrolled', window.scrollY > 36);
+}
+
+window.addEventListener('scroll', updateHeader, { passive: true });
+updateHeader();
 
 function closeMenu() {
   menuToggle.setAttribute('aria-expanded', 'false');
   menuToggle.setAttribute('aria-label', 'Apri il menu');
   primaryNav.classList.remove('is-open');
+  siteHeader.classList.remove('is-menu-open');
 }
 
 menuToggle?.addEventListener('click', () => {
@@ -31,6 +40,7 @@ menuToggle?.addEventListener('click', () => {
   menuToggle.setAttribute('aria-expanded', String(open));
   menuToggle.setAttribute('aria-label', open ? 'Chiudi il menu' : 'Apri il menu');
   primaryNav.classList.toggle('is-open', open);
+  siteHeader.classList.toggle('is-menu-open', open);
 });
 primaryNav?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
 document.addEventListener('keydown', event => {
@@ -39,7 +49,6 @@ document.addEventListener('keydown', event => {
 
 const products = {
   collari: {
-    index: '01 / 05',
     overline: 'Un dettaglio da indossare',
     title: 'Collari intrecciati',
     description: 'Intrecci e accostamenti di colore danno a ogni collare un carattere tutto suo. Un piccolo segno distintivo per le passeggiate di ogni giorno.',
@@ -47,7 +56,6 @@ const products = {
     alt: 'Collare intrecciato in cordini color sabbia, bianco e azzurro'
   },
   guinzagli: {
-    index: '02 / 05',
     overline: 'Per camminare insieme',
     title: 'Guinzagli artigianali',
     description: 'Le trame e i colori diventano parte del vostro stile. Un accessorio da scegliere pensando a tutte le strade che percorrerete insieme.',
@@ -55,7 +63,6 @@ const products = {
     alt: 'Guinzaglio celeste intrecciato con dettagli blu scuro'
   },
   set: {
-    index: '03 / 05',
     overline: 'Tutto si abbina',
     title: 'Set coordinati',
     description: 'Collare e guinzaglio dialogano tra loro con intrecci e tonalità coordinate. Per chi ama curare anche i dettagli della passeggiata.',
@@ -63,7 +70,6 @@ const products = {
     alt: 'Collare e guinzaglio coordinati in tonalità terracotta e borgogna'
   },
   colori: {
-    index: '04 / 05',
     overline: 'Un tocco di personalità',
     title: 'Colori da scegliere',
     description: 'Dalle sfumature delicate a quelle più vivaci: le combinazioni di cordini rendono ogni creazione una piccola espressione di carattere.',
@@ -71,7 +77,6 @@ const products = {
     alt: 'Collare e guinzaglio intrecciati in rosa, fucsia, viola e azzurro'
   },
   medagliette: {
-    index: '05 / 05',
     overline: 'Il dettaglio che completa',
     title: 'Medagliette e accessori',
     description: 'Piccole forme e sfumature da abbinare a collari e guinzagli, per aggiungere un dettaglio allegro e personale.',
@@ -94,7 +99,6 @@ function selectProduct(tab, focus = false) {
     item.tabIndex = selected ? 0 : -1;
   });
   panel.setAttribute('aria-labelledby', tab.id);
-  document.querySelector('#product-index').textContent = product.index;
   document.querySelector('#product-overline').textContent = product.overline;
   document.querySelector('#product-title').textContent = product.title;
   document.querySelector('#product-description').textContent = product.description;
