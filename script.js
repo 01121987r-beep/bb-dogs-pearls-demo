@@ -170,6 +170,7 @@ function showSlide(index) {
   currentSlide = index;
   const photo = gallery[index];
   productImage.src = `assets/images/${photo}.webp`;
+  productPhoto.style.setProperty('--photo-background', `url("assets/images/${photo}.webp")`);
   productImage.alt = photos[photo];
   productDots.querySelectorAll('button').forEach((dot, dotIndex) => dot.setAttribute('aria-pressed', String(dotIndex === index)));
   productPhoto.classList.remove('is-changing');
