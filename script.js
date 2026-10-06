@@ -219,6 +219,10 @@ function selectProduct(tab, focus = false) {
   void panel.offsetWidth;
   panel.classList.add('is-switching');
   if (focus) tab.focus();
+  else if (mobilePicker.matches) {
+    const top = window.scrollY + panel.getBoundingClientRect().top - siteHeader.offsetHeight - 24;
+    window.scrollTo({ top, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+  }
 }
 
 renderDots();
