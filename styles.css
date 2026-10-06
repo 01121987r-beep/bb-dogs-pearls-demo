@@ -214,6 +214,7 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
 @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes hero-photo-in { from { opacity: .4; transform: scale(1.08); } to { opacity: 1; transform: scale(1); } }
 @keyframes image-arrive { from { opacity: .55; transform: scale(1.035); } to { opacity: 1; transform: scale(1); } }
+@keyframes mobile-image-arrive { from { opacity: .55; } to { opacity: 1; } }
 @keyframes whatsapp-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
 @media (max-width: 1180px) {
@@ -286,8 +287,9 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
   .product-tab .product-thumb { width: 78px; height: 78px; }
   .product-panel { display: flex; flex-direction: column; min-height: 0; scroll-margin-top: calc(var(--header-height) + 16px); }
   .product-panel.reveal { transform: none; }
-  .product-photo { width: 100%; height: auto; aspect-ratio: 3 / 4; min-height: 0; }
-  .product-photo img { max-height: none; object-fit: contain; }
+  .product-photo { width: 100%; height: auto; aspect-ratio: auto; min-height: 0; }
+  .product-photo img { height: auto; max-height: none; object-fit: contain; }
+  .product-panel.is-switching .product-photo img, .product-photo.is-changing img { animation-name: mobile-image-arrive; }
   .product-copy { min-height: 385px; padding: 32px; }
   .product-copy h3 { font-size: 51px; }
   .contact { min-height: 0; }
