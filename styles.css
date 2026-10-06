@@ -137,8 +137,8 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
 .order-button:hover, .form-submit:hover { background: transparent; color: var(--ink); transform: translateY(-2px); }
 .order-status { display: block; margin-top: 13px; color: var(--mocha); font-size: 12px; line-height: 1.5; }
 .order-status[hidden] { display: none; }
-.contact { min-height: 740px; background: #ddd0be; }
-.contact-layout { width: min(100%, 1260px); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(60px, 9vw, 150px); align-items: center; }
+.contact { min-height: 740px; overflow: hidden; background: linear-gradient(90deg, #ddd0be 50%, #f3eadf 50%); }
+.contact-layout { width: min(100%, 1260px); margin: 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(50px, 4vw, 72px); align-items: center; }
 .contact-content { min-width: 0; }
 .contact h2 { margin-top: 30px; font-size: clamp(58px, 6.5vw, 100px); }
 .contact-content > p:not(.eyebrow) { max-width: 420px; margin: 0; color: var(--mocha); font-size: 17px; line-height: 1.7; }
@@ -241,9 +241,12 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
   .craft-layout { grid-template-columns: 1fr; gap: 60px; }
   .craft-copy { max-width: 650px; }
   .craft-visuals { width: min(100%, 670px); min-height: 0; margin: 0 auto; padding-bottom: 58px; }
-  .contact-layout { grid-template-columns: 1fr; gap: 55px; }
-  .contact-content { max-width: 750px; }
-  .contact-form { max-width: 620px; }
+  .contact { background: #ddd0be; }
+  .contact-layout { grid-template-columns: 1fr; gap: 0; }
+  .contact-content { max-width: 750px; padding-bottom: 70px; }
+  .contact-form { position: relative; isolation: isolate; max-width: 620px; margin-inline: auto; padding-top: 70px; }
+  .contact-form::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: -200px; left: 50%; width: 100vw; transform: translateX(-50%); background: #f3eadf; }
+  .contact-form.reveal { opacity: 1; transform: none; }
 }
 
 @media (max-width: 760px) {
@@ -295,10 +298,11 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
   .product-copy { min-height: 385px; padding: 32px; }
   .product-copy h3 { font-size: 51px; }
   .contact { min-height: 0; }
-  .contact-layout { grid-template-columns: 1fr; gap: 55px; }
+  .contact-layout { grid-template-columns: 1fr; gap: 0; }
+  .contact-content { padding-bottom: 64px; }
   .contact h2 { font-size: clamp(57px, 10vw, 78px); }
   .contact-channels { margin-top: 27px; }
-  .contact-form { max-width: 560px; padding-top: 0; }
+  .contact-form { max-width: 560px; padding-top: 64px; }
   .info-dialog { width: min(520px, calc(100vw - 24px)); height: min(580px, calc(100dvh - 24px)); max-height: none; padding: 20px 22px; overflow: hidden; }
   .info-dialog h2 { margin: 4px 0 8px; font-size: clamp(34px, 6vw, 42px); line-height: 1.04; }
   .info-description { margin-bottom: 12px; font-size: 13px; line-height: 1.4; }
