@@ -65,10 +65,8 @@ h1 em, h2 em { color: #a78064; font-family: var(--hand); font-weight: 400; font-
 .hero h1 em { white-space: nowrap; }
 .hero-description { margin: 0 0 35px; width: min(455px, 94%); color: var(--muted); font-size: 17px; line-height: 1.72; animation: fade-up .8s .54s both; }
 .hero-cta-wrap { animation: fade-up .8s .66s both; }
-.hero-cta { position: relative; isolation: isolate; display: inline-flex; min-height: 59px; align-items: center; justify-content: center; overflow: hidden; padding: 12px 31px 13px; border: 1px solid var(--mocha); background: transparent; color: var(--ink); font-family: var(--hand); font-size: 20px; line-height: 1.2; text-decoration: none; box-shadow: 5px 5px 0 rgba(197,170,145,.42); transition: color .35s ease, transform .35s ease, box-shadow .35s ease; }
-.hero-cta::before { content: ""; position: absolute; z-index: -1; inset: 0; background: var(--mocha); transform: translateX(-101%); transition: transform .42s cubic-bezier(.2,.7,.2,1); }
-.hero-cta:hover, .hero-cta:focus-visible { color: var(--ivory); transform: translate(-2px, -2px); box-shadow: 8px 8px 0 rgba(197,170,145,.42); }
-.hero-cta:hover::before, .hero-cta:focus-visible::before { transform: translateX(0); }
+.hero-cta { display: inline-flex; min-height: 59px; align-items: center; justify-content: center; padding: 12px 31px 13px; border: 1px solid var(--mocha); background-color: var(--ivory); color: var(--ink); font-family: var(--hand); font-size: 20px; line-height: 1.2; text-decoration: none; box-shadow: 5px 5px 0 rgba(197,170,145,.42); transition: background-color .38s ease, color .38s ease, transform .35s ease, box-shadow .35s ease; }
+.hero-cta:hover, .hero-cta:focus-visible { background-color: var(--mocha); color: var(--ivory); transform: translate(-2px, -2px); box-shadow: 8px 8px 0 rgba(197,170,145,.42); }
 .hero-cta:active { transform: translate(1px, 1px); box-shadow: 3px 3px 0 rgba(197,170,145,.42); }
 .hero-bottom { margin-top: auto; display: flex; align-items: center; gap: 16px; color: var(--mocha); font-family: var(--hand); font-size: 18px; transform: rotate(-3deg); }
 .hero-sparkle { color: #b6977f; font-family: var(--body); font-size: 22px; }
