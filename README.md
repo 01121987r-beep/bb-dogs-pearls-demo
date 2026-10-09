@@ -25,3 +25,9 @@ Quindi aprire `http://127.0.0.1:4173/`.
 - Icone Instagram e Facebook collegate ai profili ufficiali nell'header, nella sezione Contatti e in fondo alla Mappa del sito. Le icone di telefono ed email nella sezione Contatti e nel footer aprono rispettivamente la chiamata al numero +39 378 091 3974 e un messaggio a info@bbdogspearls.com. Nel footer la Mappa del sito precede Contatti e l'indirizzo non compare.
 
 Il sito è una vetrina orientata agli ordini via WhatsApp, senza carrello o pagamenti online. Prima della pubblicazione sul dominio definitivo restano da confermare testi, informazioni su materiali e prodotti, recapiti aggiuntivi e gestione dei due moduli.
+
+## SEO e pubblicazione
+
+La demo GitHub ha `<meta name="robots" content="noindex">` per evitare che l'anteprima competa con il dominio definitivo. Titolo, descrizione, canonical, dati strutturati, favicon e metadati di condivisione sono predisposti per `https://www.bbdogspearls.com/`, destinazione del redirect dal dominio senza `www`. Le risorse `robots.txt` e `sitemap.xml` sono pronte per la radice del dominio definitivo.
+
+Prima di pubblicare il sito completo su `bbdogspearls.com`: rimuovere **solo allora** il meta tag `noindex`, confermare l'URL canonico e le immagini usate nei metadati, verificare che `robots.txt` e `sitemap.xml` rispondano dalla radice del dominio, poi registrare il sito in Google Search Console e inviare la sitemap. Il Google tag di Analytics non è installato: misura le visite, ma non determina il titolo o la descrizione nei risultati di ricerca. Non aggiungerlo senza un ID reale e una gestione adeguata del consenso.
