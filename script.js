@@ -45,25 +45,6 @@ menuToggle?.addEventListener('click', () => {
 });
 primaryNav?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
 
-const channelToast = document.querySelector('#channel-toast');
-let channelToastTimer;
-
-function hideChannelToast() {
-  window.clearTimeout(channelToastTimer);
-  channelToast.hidden = true;
-}
-
-document.querySelectorAll('.channel-icon[data-channel]').forEach(button => {
-  button.addEventListener('click', () => {
-    const channel = button.dataset.channel;
-    const kind = channel === 'Telefono' || channel === 'Email' ? 'recapito' : 'collegamento';
-    window.clearTimeout(channelToastTimer);
-    channelToast.textContent = `${channel}: ${kind} in preparazione.`;
-    channelToast.hidden = false;
-    channelToastTimer = window.setTimeout(hideChannelToast, 3200);
-  });
-});
-
 function openWhatsApp(message) {
   const phone = whatsappNumber.replace(/\D/g, '');
   if (!phone) return false;
@@ -74,7 +55,6 @@ function openWhatsApp(message) {
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape') {
     closeMenu();
-    hideChannelToast();
   }
 });
 
