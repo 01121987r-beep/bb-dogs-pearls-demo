@@ -11,8 +11,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
     <link rel="preload" as="image" href="assets/images/guinzaglio-montagna.webp">
-    <link rel="stylesheet" href="styles.css?v=20261009-9">
-    <script src="script.js?v=20261009-6" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261009-10">
+    <script src="script.js?v=20261009-7" defer></script>
   </head>
   <body class="intro-active">
     <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -169,6 +169,7 @@
           <p>Scopri collari, guinzagli e accessori fatti a mano su richiesta.</p>
         </div>
         <div class="product-picker reveal" role="tablist" aria-label="Tipi di prodotto">
+          <div class="product-track" id="product-track" role="presentation">
           <button class="product-tab is-active" type="button" role="tab" id="tab-collari-intrecciati" aria-selected="true" aria-controls="product-panel" data-product="collari-intrecciati"><span class="product-thumb"><img src="assets/images/collare-sabbia.webp" alt="" width="88" height="88" loading="lazy"></span><span>Collari intrecciati</span></button>
           <button class="product-tab" type="button" role="tab" id="tab-collari-fiore" aria-selected="false" aria-controls="product-panel" data-product="collari-fiore" tabindex="-1"><span class="product-thumb"><img src="assets/images/set-fucsia.webp" alt="" width="88" height="88" loading="lazy"></span><span>Collari fiore</span></button>
           <button class="product-tab" type="button" role="tab" id="tab-collari-biothane-rivestito" aria-selected="false" aria-controls="product-panel" data-product="collari-biothane-rivestito" tabindex="-1"><span class="product-thumb"><img src="assets/images/guinzaglio-montagna.webp" alt="" width="88" height="88" loading="lazy"></span><span>Collari in biothane rivestito</span></button>
@@ -180,6 +181,7 @@
           <button class="product-tab" type="button" role="tab" id="tab-medagliette" aria-selected="false" aria-controls="product-panel" data-product="medagliette" tabindex="-1"><span class="product-thumb"><img src="assets/images/medagliette.webp" alt="" width="88" height="88" loading="lazy"></span><span>Medagliette</span></button>
           <button class="product-tab" type="button" role="tab" id="tab-targhette-fisse" aria-selected="false" aria-controls="product-panel" data-product="targhette-fisse" tabindex="-1"><span class="product-thumb"><img src="assets/images/medagliette.webp" alt="" width="88" height="88" loading="lazy"></span><span>Targhette fisse</span></button>
           <button class="product-tab" type="button" role="tab" id="tab-portasacchetti" aria-selected="false" aria-controls="product-panel" data-product="portasacchetti" tabindex="-1"><span class="product-thumb"><img src="assets/images/set-fucsia.webp" alt="" width="88" height="88" loading="lazy"></span><span>Portasacchetti</span></button>
+          </div>
         </div>
         <div class="product-scroll-indicator" id="product-scroll-indicator" aria-hidden="true"><span></span></div>
         <div class="product-panel reveal" id="product-panel" role="tabpanel" aria-labelledby="tab-collari-intrecciati" tabindex="0">

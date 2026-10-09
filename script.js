@@ -158,6 +158,7 @@ const photos = {
 
 const tabs = [...document.querySelectorAll('.product-tab')];
 const productPicker = document.querySelector('.product-picker');
+const productTrack = document.querySelector('#product-track');
 const pickerIndicator = document.querySelector('#product-scroll-indicator');
 const pickerIndicatorThumb = pickerIndicator.querySelector('span');
 const panel = document.querySelector('#product-panel');
@@ -265,21 +266,13 @@ let pickerCopies = [];
 let pickerCycleWidth = 0;
 let pickerVisible = false;
 let pickerPaused = false;
-let pickerFrame = 0;
-let pickerLastFrame = 0;
-let pickerPosition = 0;
-let pickerAnimating = false;
 let pickerResumeTimer;
 let pickerIndicatorTimer;
 let pickerDrag;
 let pickerPreventClick = false;
 
 function stopPickerCarousel() {
-  window.cancelAnimationFrame(pickerFrame);
-  pickerFrame = 0;
-  pickerLastFrame = 0;
-  pickerAnimating = false;
-  pickerPosition = productPicker.scrollLeft;
+  productPicker.classList.remove('is-running');
 }
 
 function normalizePickerScroll() {
@@ -290,7 +283,9 @@ function normalizePickerScroll() {
 
 function updatePickerIndicator() {
   if (!pickerCycleWidth) return;
-  const position = ((productPicker.scrollLeft % pickerCycleWidth) + pickerCycleWidth) % pickerCycleWidth;
+  const transform = getComputedStyle(productTrack).transform;
+  const animatedOffset = transform === 'none' ? 0 : -new DOMMatrixReadOnly(transform).m41;
+  const position = (((productPicker.scrollLeft + animatedOffset) % pickerCycleWidth) + pickerCycleWidth) % pickerCycleWidth;
   pickerIndicatorThumb.style.left = `${position / pickerCycleWidth * 70}%`;
 }
 
@@ -306,24 +301,9 @@ function hidePickerIndicator() {
   pickerIndicatorTimer = window.setTimeout(() => pickerIndicator.classList.remove('is-visible'), 1300);
 }
 
-function advancePicker(time) {
-  if (!pickerAnimating) return;
-  if (pickerLastFrame) {
-    pickerPosition += Math.min(time - pickerLastFrame, 64) * .014;
-    if (pickerPosition >= pickerCycleWidth * 1.5) pickerPosition -= pickerCycleWidth;
-    productPicker.scrollLeft = pickerPosition;
-  }
-  pickerLastFrame = time;
-  pickerFrame = window.requestAnimationFrame(advancePicker);
-}
-
 function startPickerCarousel() {
-  stopPickerCarousel();
-  if (!pickerVisible || pickerPaused || reducedMotion.matches || document.hidden) return;
-  normalizePickerScroll();
-  pickerPosition = productPicker.scrollLeft;
-  pickerAnimating = true;
-  pickerFrame = window.requestAnimationFrame(advancePicker);
+  const shouldRun = pickerCycleWidth && pickerVisible && !pickerPaused && !reducedMotion.matches && !document.hidden;
+  productPicker.classList.toggle('is-running', Boolean(shouldRun));
 }
 
 function pausePickerCarousel(delay = 0) {
@@ -339,6 +319,7 @@ function pausePickerCarousel(delay = 0) {
 
 function setupPickerCarousel() {
   stopPickerCarousel();
+  productPicker.classList.remove('has-loop');
   pickerCopies.forEach(copy => copy.remove());
   pickerCopies = [];
   pickerCycleWidth = 0;
@@ -361,20 +342,19 @@ function setupPickerCarousel() {
   };
   const before = tabs.map(makeCopy);
   const after = tabs.map(makeCopy);
-  productPicker.prepend(...before);
-  productPicker.append(...after);
+  productTrack.prepend(...before);
+  productTrack.append(...after);
   pickerCycleWidth = tabs[0].offsetLeft - before[0].offsetLeft;
+  productPicker.style.setProperty('--picker-shift', `${-pickerCycleWidth}px`);
+  productPicker.style.setProperty('--picker-duration', `${pickerCycleWidth / 14}s`);
   productPicker.scrollLeft = pickerCycleWidth;
-  pickerPosition = pickerCycleWidth;
+  productPicker.classList.add('has-loop');
   updatePickerIndicator();
   startPickerCarousel();
 }
 
 productPicker.addEventListener('scroll', () => {
-  if (!pickerAnimating) {
-    normalizePickerScroll();
-    pickerPosition = productPicker.scrollLeft;
-  }
+  normalizePickerScroll();
   updatePickerIndicator();
 }, { passive: true });
 productPicker.addEventListener('pointerdown', event => {
@@ -436,7 +416,8 @@ document.addEventListener('visibilitychange', startPickerCarousel);
 window.addEventListener('resize', () => {
   if (pickerCopies.length) {
     pickerCycleWidth = tabs[0].offsetLeft - pickerCopies[0].offsetLeft;
-    if (!pickerAnimating) pickerPosition = productPicker.scrollLeft;
+    productPicker.style.setProperty('--picker-shift', `${-pickerCycleWidth}px`);
+    productPicker.style.setProperty('--picker-duration', `${pickerCycleWidth / 14}s`);
   }
 }, { passive: true });
 if ('IntersectionObserver' in window) {
