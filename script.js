@@ -1,7 +1,7 @@
 const intro = document.querySelector('#intro');
 const skipIntro = document.querySelector('#intro-skip');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const whatsappNumber = '';
+const whatsappNumber = '393780913974';
 
 function closeIntro() {
   if (!intro || intro.classList.contains('is-hidden')) return;
@@ -45,9 +45,6 @@ menuToggle?.addEventListener('click', () => {
 });
 primaryNav?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
 
-const whatsappFloat = document.querySelector('#whatsapp-float');
-const whatsappButton = document.querySelector('#whatsapp-button');
-const whatsappNote = document.querySelector('#whatsapp-note');
 const channelToast = document.querySelector('#channel-toast');
 let channelToastTimer;
 
@@ -67,11 +64,6 @@ document.querySelectorAll('.channel-icon[data-channel]').forEach(button => {
   });
 });
 
-function closeWhatsAppNote() {
-  whatsappNote.hidden = true;
-  whatsappButton.setAttribute('aria-expanded', 'false');
-}
-
 function openWhatsApp(message) {
   const phone = whatsappNumber.replace(/\D/g, '');
   if (!phone) return false;
@@ -79,19 +71,9 @@ function openWhatsApp(message) {
   return true;
 }
 
-whatsappButton?.addEventListener('click', () => {
-  if (openWhatsApp('Ciao Belinda, vorrei avere informazioni sulle tue creazioni.')) return;
-  const open = whatsappNote.hidden;
-  whatsappNote.hidden = !open;
-  whatsappButton.setAttribute('aria-expanded', String(open));
-});
-document.addEventListener('click', event => {
-  if (!whatsappFloat.contains(event.target)) closeWhatsAppNote();
-});
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape') {
     closeMenu();
-    closeWhatsAppNote();
     hideChannelToast();
   }
 });
