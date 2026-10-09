@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
     <link rel="preload" as="image" href="assets/images/guinzaglio-montagna.webp">
-    <link rel="stylesheet" href="styles.css?v=20261009-5">
+    <link rel="stylesheet" href="styles.css?v=20261009-6">
     <script src="script.js?v=20261009-2" defer></script>
   </head>
   <body class="intro-active">
@@ -177,6 +177,7 @@
               <label class="form-field" for="contact-interest"><span>Cosa ti interessa?</span><select id="contact-interest" name="interest"><option value="">Scegli, se vuoi</option><option value="Collari intrecciati">Collari intrecciati</option><option value="Collari fiore">Collari fiore</option><option value="Collari in biothane rivestito">Collari in biothane rivestito</option><option value="Collari in corda">Collari in corda</option><option value="Guinzagli in corda">Guinzagli in corda</option><option value="Guinzagli intrecciati">Guinzagli intrecciati</option><option value="Collari e guinzagli in biothane">Collari e guinzagli in biothane</option><option value="Portamedagliette">Portamedagliette</option><option value="Medagliette">Medagliette</option><option value="Targhette fisse">Targhette fisse</option><option value="Portasacchetti">Portasacchetti</option><option value="Altro">Altro</option></select></label>
             </div>
             <label class="form-field" for="contact-message"><span>Il tuo messaggio <b aria-hidden="true">*</b></span><textarea id="contact-message" name="message" rows="4" placeholder="Parlami del tuo cane, dei colori che ami o di ciò che immagini..." required></textarea></label>
+            <label class="form-consent" for="contact-consent"><input id="contact-consent" name="privacy_consent" type="checkbox" value="yes" required><span>Acconsento all'utilizzo dei dati inseriti per ricevere una risposta alla mia richiesta. <b aria-hidden="true">*</b></span></label>
             <div class="form-bottom"><span>* Campi obbligatori</span><button class="form-submit" type="submit">Invia messaggio</button></div>
             <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
           </form>
@@ -228,8 +229,12 @@
           <label class="form-field" for="info-name"><span>Il tuo nome <b aria-hidden="true">*</b></span><input id="info-name" name="name" type="text" autocomplete="name" placeholder="Come ti chiami?" required></label>
           <label class="form-field" for="info-email"><span>La tua email <b aria-hidden="true">*</b></span><input id="info-email" name="email" type="email" autocomplete="email" placeholder="nome@esempio.it" required></label>
         </div>
-        <label class="form-field" for="info-topic"><span>Vorrei sapere di più su</span><select id="info-topic" name="topic"><option value="">Scegli, se vuoi</option><option value="Materiali">Materiali</option><option value="Lavorazione">Lavorazione</option><option value="Personalizzazioni">Personalizzazioni</option><option value="Altro">Altro</option></select></label>
+        <div class="form-row">
+          <label class="form-field" for="info-phone"><span>Telefono</span><input id="info-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Il tuo numero, se vuoi"></label>
+          <label class="form-field" for="info-topic"><span>Vorrei sapere di più su</span><select id="info-topic" name="topic"><option value="">Scegli, se vuoi</option><option value="Materiali">Materiali</option><option value="Lavorazione">Lavorazione</option><option value="Personalizzazioni">Personalizzazioni</option><option value="Altro">Altro</option></select></label>
+        </div>
         <label class="form-field" for="info-message"><span>La tua domanda <b aria-hidden="true">*</b></span><textarea id="info-message" name="message" rows="4" placeholder="Scrivimi quello che vorresti sapere..." required></textarea></label>
+        <label class="form-consent" for="info-consent"><input id="info-consent" name="privacy_consent" type="checkbox" value="yes" required><span>Acconsento all'utilizzo dei dati inseriti per ricevere una risposta alla mia richiesta. <b aria-hidden="true">*</b></span></label>
         <div class="form-bottom"><span>* Campi obbligatori</span><button class="form-submit" type="submit">Invia richiesta</button></div>
         <p class="info-delivery-note">Invio disponibile quando sarà collegata l'email del brand.</p>
         <p class="form-status" id="info-form-status" role="status" aria-live="polite" hidden></p>
