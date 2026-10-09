@@ -273,6 +273,8 @@ let pickerPosition = 0;
 let pickerAnimating = false;
 let pickerResumeTimer;
 let pickerIndicatorTimer;
+let pickerDrag;
+let pickerPreventClick = false;
 
 function stopPickerCarousel() {
   window.cancelAnimationFrame(pickerFrame);
@@ -319,7 +321,7 @@ function advancePicker(time) {
 
 function startPickerCarousel() {
   stopPickerCarousel();
-  if (!mobilePicker.matches || !pickerVisible || pickerPaused || reducedMotion.matches || document.hidden) return;
+  if (!pickerVisible || pickerPaused || reducedMotion.matches || document.hidden) return;
   normalizePickerScroll();
   pickerPosition = productPicker.scrollLeft;
   pickerAnimating = true;
@@ -342,11 +344,7 @@ function setupPickerCarousel() {
   pickerCopies.forEach(copy => copy.remove());
   pickerCopies = [];
   pickerCycleWidth = 0;
-  if (!mobilePicker.matches) {
-    productPicker.scrollLeft = 0;
-    pickerIndicator.classList.remove('is-visible');
-    return;
-  }
+  pickerIndicator.classList.remove('is-visible');
   const makeCopy = tab => {
     const copy = tab.cloneNode(true);
     copy.removeAttribute('id');
@@ -381,10 +379,44 @@ productPicker.addEventListener('scroll', () => {
   }
   updatePickerIndicator();
 }, { passive: true });
-productPicker.addEventListener('pointerdown', () => {
+productPicker.addEventListener('pointerdown', event => {
   pausePickerCarousel();
   showPickerIndicator();
+  if (event.pointerType === 'mouse' && event.button === 0) {
+    pickerDrag = { id: event.pointerId, x: event.clientX, scrollLeft: productPicker.scrollLeft, moved: false };
+  }
 }, { passive: true });
+window.addEventListener('pointermove', event => {
+  if (!pickerDrag || event.pointerId !== pickerDrag.id) return;
+  const distance = event.clientX - pickerDrag.x;
+  if (!pickerDrag.moved && Math.abs(distance) < 6) return;
+  pickerDrag.moved = true;
+  productPicker.classList.add('is-dragging');
+  productPicker.scrollLeft = pickerDrag.scrollLeft - distance;
+}, { passive: true });
+window.addEventListener('pointerup', event => {
+  if (!pickerDrag || event.pointerId !== pickerDrag.id) return;
+  if (pickerDrag.moved) {
+    pickerPreventClick = true;
+    window.setTimeout(() => { pickerPreventClick = false; }, 0);
+  }
+  pickerDrag = undefined;
+  productPicker.classList.remove('is-dragging');
+  pausePickerCarousel(2500);
+}, { passive: true });
+window.addEventListener('pointercancel', event => {
+  if (!pickerDrag || event.pointerId !== pickerDrag.id) return;
+  pickerDrag = undefined;
+  productPicker.classList.remove('is-dragging');
+  pausePickerCarousel(2500);
+}, { passive: true });
+productPicker.addEventListener('click', event => {
+  if (!pickerPreventClick) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  pickerPreventClick = false;
+}, true);
+productPicker.addEventListener('dragstart', event => event.preventDefault());
 productPicker.addEventListener('pointerup', () => {
   pausePickerCarousel(2500);
   hidePickerIndicator();
@@ -404,7 +436,7 @@ mobilePicker.addEventListener('change', setupPickerCarousel);
 reducedMotion.addEventListener('change', startPickerCarousel);
 document.addEventListener('visibilitychange', startPickerCarousel);
 window.addEventListener('resize', () => {
-  if (mobilePicker.matches && pickerCopies.length) {
+  if (pickerCopies.length) {
     pickerCycleWidth = tabs[0].offsetLeft - pickerCopies[0].offsetLeft;
     if (!pickerAnimating) pickerPosition = productPicker.scrollLeft;
   }
