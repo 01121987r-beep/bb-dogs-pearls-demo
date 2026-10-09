@@ -58,6 +58,24 @@ document.addEventListener('keydown', event => {
   }
 });
 
+const materialsSection = document.querySelector('#materiali');
+const materialTabs = [...document.querySelectorAll('.material-tab')];
+const materialPanels = [...document.querySelectorAll('.material-panel')];
+
+if (materialsSection && materialTabs.length === materialPanels.length) {
+  materialsSection.classList.add('is-enhanced');
+  const selectMaterial = activeTab => {
+    materialTabs.forEach(tab => {
+      const selected = tab === activeTab;
+      tab.classList.toggle('is-active', selected);
+      tab.setAttribute('aria-pressed', String(selected));
+      document.querySelector(`#${tab.getAttribute('aria-controls')}`).hidden = !selected;
+    });
+  };
+  materialTabs.forEach(tab => tab.addEventListener('click', () => selectMaterial(tab)));
+  selectMaterial(materialTabs[0]);
+}
+
 const products = {
   'collari-intrecciati': {
     overline: 'Un dettaglio da indossare',
