@@ -79,35 +79,71 @@ document.addEventListener('keydown', event => {
 });
 
 const products = {
-  collari: {
+  'collari-intrecciati': {
     overline: 'Un dettaglio da indossare',
     title: 'Collari intrecciati',
     description: 'Intrecci e accostamenti di colore danno a ogni collare un carattere tutto suo. Un piccolo segno distintivo per le passeggiate di ogni giorno.',
     gallery: ['collare-sabbia', 'set-oceano', 'set-terracotta', 'set-fucsia']
   },
-  guinzagli: {
+  'collari-fiore': {
+    overline: 'Un tocco floreale',
+    title: 'Collari fiore',
+    description: 'Un collare con un dettaglio a fiore da immaginare nei colori che preferisci. Scrivi a Belinda per definire insieme la tua versione.',
+    gallery: ['set-fucsia', 'collare-sabbia', 'set-oceano', 'set-terracotta']
+  },
+  'collari-biothane-rivestito': {
+    overline: 'Da creare insieme',
+    title: 'Collari in biothane rivestito',
+    description: 'Una proposta in biothane rivestito da personalizzare su richiesta. Contatta Belinda per parlare di colori, misura e dettagli.',
+    gallery: ['guinzaglio-montagna', 'set-celeste', 'set-fucsia', 'collare-sabbia']
+  },
+  'collari-corda': {
+    overline: 'Per ogni passeggiata',
+    title: 'Collari in corda',
+    description: 'Collari in corda pensati per accompagnare le passeggiate di ogni giorno. Colori e misura si scelgono insieme prima della realizzazione.',
+    gallery: ['set-oceano', 'collare-sabbia', 'set-terracotta', 'set-celeste']
+  },
+  'guinzagli-corda': {
     overline: 'Per camminare insieme',
-    title: 'Guinzagli artigianali',
-    description: 'Le trame e i colori diventano parte del vostro stile. Un accessorio da scegliere pensando a tutte le strade che percorrerete insieme.',
+    title: 'Guinzagli in corda',
+    description: 'Un guinzaglio in corda da scegliere in base ai colori che ami. Racconta a Belinda come lo immagini e definite insieme i dettagli.',
     gallery: ['guinzaglio-celeste', 'guinzaglio-montagna', 'set-terracotta', 'set-celeste']
   },
-  set: {
-    overline: 'Tutto si abbina',
-    title: 'Set coordinati',
-    description: 'Collare e guinzaglio dialogano tra loro con intrecci e tonalità coordinate. Per chi ama curare anche i dettagli della passeggiata.',
+  'guinzagli-intrecciati': {
+    overline: 'Trame da scegliere',
+    title: 'Guinzagli intrecciati',
+    description: 'Gli intrecci danno carattere al guinzaglio. Per colori e combinazioni, ogni richiesta parte da una conversazione con Belinda.',
     gallery: ['set-terracotta', 'set-oceano', 'set-celeste', 'set-fucsia']
   },
-  colori: {
-    overline: 'Un tocco di personalità',
-    title: 'Colori da scegliere',
-    description: 'Dalle sfumature delicate a quelle più vivaci: le combinazioni di cordini rendono ogni creazione una piccola espressione di carattere.',
-    gallery: ['set-fucsia', 'set-terracotta', 'set-oceano', 'set-celeste']
+  'collari-guinzagli-biothane': {
+    overline: 'Insieme, nei dettagli',
+    title: 'Collari e guinzagli in biothane',
+    description: 'Collare e guinzaglio in biothane possono essere scelti insieme. Scrivi per concordare colori, misure e finiture su richiesta.',
+    gallery: ['set-celeste', 'guinzaglio-montagna', 'set-terracotta', 'set-oceano']
+  },
+  portamedagliette: {
+    overline: 'Un piccolo dettaglio',
+    title: 'Portamedagliette',
+    description: 'Un accessorio dedicato alla medaglietta del tuo cane. Chiedi a Belinda quali colori e dettagli sono disponibili.',
+    gallery: ['medagliette', 'set-celeste', 'set-oceano']
   },
   medagliette: {
     overline: 'Il dettaglio che completa',
-    title: 'Medagliette e accessori',
-    description: 'Piccole forme e sfumature da abbinare a collari e guinzagli, per aggiungere un dettaglio allegro e personale.',
+    title: 'Medagliette',
+    description: 'Piccole forme e sfumature da abbinare a collari e guinzagli. Contatta Belinda per conoscere le possibilità di personalizzazione.',
     gallery: ['medagliette', 'set-celeste', 'set-oceano']
+  },
+  'targhette-fisse': {
+    overline: 'Sempre con sé',
+    title: 'Targhette fisse',
+    description: 'Una targhetta da pensare insieme al collare. Scrivi a Belinda per scegliere la soluzione e i dettagli più adatti.',
+    gallery: ['medagliette', 'set-oceano', 'collare-sabbia']
+  },
+  portasacchetti: {
+    overline: 'Pratico da portare',
+    title: 'Portasacchetti',
+    description: 'Un accessorio da avere con sé durante la passeggiata. Colori e dettagli si concordano con Belinda prima della realizzazione.',
+    gallery: ['set-fucsia', 'set-terracotta', 'guinzaglio-celeste']
   }
 };
 
@@ -130,7 +166,7 @@ const panel = document.querySelector('#product-panel');
 const productPhoto = document.querySelector('#product-photo');
 const productImage = document.querySelector('#product-image');
 const productDots = document.querySelector('#product-dots');
-let selectedProduct = 'collari';
+let selectedProduct = 'collari-intrecciati';
 let currentSlide = 0;
 let carouselTimer;
 let carouselVisible = false;
