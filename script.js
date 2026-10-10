@@ -458,11 +458,9 @@ const infoDialog = document.querySelector('#info-dialog');
 const infoClose = document.querySelector('#info-close');
 const infoForm = document.querySelector('#info-form');
 const infoFormStatus = document.querySelector('#info-form-status');
-const infoDeliveryNote = document.querySelector('.info-delivery-note');
 
 infoOpen?.addEventListener('click', () => {
   infoFormStatus.hidden = true;
-  infoDeliveryNote.hidden = false;
   infoDialog.showModal();
   document.body.classList.add('modal-open');
   if (mobilePicker.matches) infoDialog.focus({ preventScroll: true });
@@ -482,7 +480,6 @@ infoForm?.addEventListener('submit', event => {
   event.preventDefault();
   if (!infoForm.reportValidity()) return;
   infoFormStatus.textContent = 'La richiesta è pronta. Per inviarla manca ancora l’indirizzo email di destinazione.';
-  infoDeliveryNote.hidden = true;
   infoFormStatus.hidden = false;
 });
 
