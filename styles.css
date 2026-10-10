@@ -388,11 +388,11 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
   .contact h2 { font-size: clamp(57px, 10vw, 78px); }
   .contact-channels { margin-top: 27px; }
   .contact-form { max-width: 560px; padding-top: 64px; }
-  .info-dialog { width: min(520px, calc(100vw - 24px)); height: auto; max-height: calc(100dvh - 24px); padding: 20px 22px 18px; overflow-y: auto; }
+  .info-dialog { width: min(520px, calc(100vw - 24px)); height: min(550px, calc(100dvh - 24px)); max-height: calc(100dvh - 24px); padding: 20px 22px 14px; overflow-y: auto; }
   .info-dialog h2 { margin: 4px 0 8px; font-size: clamp(34px, 6vw, 42px); line-height: 1.04; }
   .info-description { margin-bottom: 12px; font-size: 13px; line-height: 1.4; }
   .info-dialog .form-row { gap: 12px; }
-  .info-dialog .form-field { gap: 2px; margin-bottom: 11px; }
+  .info-dialog .form-field { gap: 2px; margin-bottom: 16px; }
   .info-dialog .form-field > span { font-size: 11px; }
   .info-dialog .form-field input, .info-dialog .form-field select, .info-dialog .form-field textarea { min-height: 34px; padding: 4px 0 6px; font-size: 16px; }
   .info-dialog .form-field textarea { min-height: 62px; max-height: 62px; resize: none; }
@@ -429,16 +429,16 @@ h2 { margin: 24px 0 30px; font-size: clamp(48px, 5.2vw, 78px); font-weight: 500;
   .product-copy h3 { font-size: 46px; }
   .form-row { grid-template-columns: 1fr; gap: 0; }
   .form-bottom { align-items: flex-start; flex-direction: column; }
-  .info-dialog { padding: 18px 18px 16px; }
+  .info-dialog { padding: 18px 18px 12px; }
   .info-dialog h2 { font-size: 36px; }
   .info-dialog .form-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 }
 
 @media (max-width: 760px) and (max-height: 600px) {
-  .info-dialog { padding-block: 14px 12px; }
+  .info-dialog { height: min(510px, calc(100dvh - 24px)); padding-block: 14px 10px; }
   .info-dialog h2 { font-size: 32px; margin-bottom: 5px; }
   .info-description { margin-bottom: 8px; }
-  .info-dialog .form-field { margin-bottom: 7px; }
+  .info-dialog .form-field { margin-bottom: 10px; }
   .info-dialog .form-field textarea { min-height: 52px; max-height: 52px; }
   .info-dialog .form-bottom { margin-top: 8px; }
 }
