@@ -52,7 +52,7 @@
       }
     </script>
     <link rel="preload" as="image" href="assets/images/guinzaglio-montagna.webp">
-    <link rel="stylesheet" href="styles.css?v=20261012-1">
+    <link rel="stylesheet" href="styles.css?v=20261012-2">
     <script src="script.js?v=20261012-1" defer></script>
   </head>
   <body class="intro-active">
@@ -208,7 +208,7 @@
           <h2 id="shop-title">Collari e guinzagli artigianali...<br> <em>e non solo.</em></h2>
           <p>Scopri collari, guinzagli e accessori fatti a mano su richiesta.</p>
         </div>
-        <div class="product-grid reveal" aria-label="Esplora le creazioni">
+        <div class="product-grid reveal" role="group" aria-label="Esplora le creazioni">
           <button class="product-choice" type="button" aria-haspopup="dialog" aria-controls="product-dialog" data-product="collari-intrecciati"><span class="product-thumb"><img src="assets/images/collare-sabbia.webp" alt="" width="240" height="240" loading="lazy"></span><span>Collari intrecciati</span></button>
           <button class="product-choice" type="button" aria-haspopup="dialog" aria-controls="product-dialog" data-product="collari-fiore"><span class="product-thumb"><img src="assets/images/set-fucsia.webp" alt="" width="240" height="240" loading="lazy"></span><span>Collari fiore</span></button>
           <button class="product-choice" type="button" aria-haspopup="dialog" aria-controls="product-dialog" data-product="collari-biothane-rivestito"><span class="product-thumb"><img src="assets/images/guinzaglio-montagna.webp" alt="" width="240" height="240" loading="lazy"></span><span>Collari in biothane rivestito</span></button>
@@ -224,7 +224,7 @@
         <dialog class="product-dialog" id="product-dialog" aria-labelledby="product-title" aria-describedby="product-description">
           <button class="product-close" id="product-close" type="button" aria-label="Chiudi il prodotto">×</button>
           <div class="product-panel" id="product-panel">
-            <div class="product-photo" id="product-photo" aria-label="Fotografie dei collari">
+            <div class="product-photo" id="product-photo" role="group" aria-label="Fotografie dei collari">
               <img id="product-image" src="assets/images/collare-sabbia.webp" alt="Collare intrecciato in cordini color sabbia, bianco e azzurro" width="546" height="720">
               <div class="product-dots" id="product-dots" role="group" aria-label="Scegli una fotografia"></div>
             </div>
