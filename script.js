@@ -3,20 +3,24 @@ const skipIntro = document.querySelector('#intro-skip');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const whatsappNumber = '393780913974';
 
-function closeIntro() {
+function closeIntro(immediate = false) {
   if (!intro || intro.classList.contains('is-hidden')) return;
   intro.classList.add('is-hidden');
   intro.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('intro-active');
-  window.setTimeout(() => { intro.hidden = true; }, 700);
+  if (immediate) intro.hidden = true;
+  else window.setTimeout(() => { intro.hidden = true; }, 700);
 }
 
-if (reducedMotion.matches) {
-  closeIntro();
+if (document.documentElement.dataset.intro === 'skip' || reducedMotion.matches) {
+  closeIntro(true);
 } else {
   window.setTimeout(closeIntro, 4300);
 }
-skipIntro?.addEventListener('click', closeIntro);
+skipIntro?.addEventListener('click', () => closeIntro());
+window.addEventListener('pageshow', event => {
+  if (event.persisted) closeIntro(true);
+});
 
 const menuToggle = document.querySelector('#menu-toggle');
 const primaryNav = document.querySelector('#primary-nav');

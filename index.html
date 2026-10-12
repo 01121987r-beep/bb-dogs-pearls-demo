@@ -3,6 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+      (() => {
+        const navigation = performance.getEntriesByType?.('navigation')?.[0];
+        const legacyType = performance.navigation?.type;
+        const type = navigation?.type ?? (legacyType === 1 ? 'reload' : legacyType === 2 ? 'back_forward' : undefined);
+        if (type === 'reload' || type === 'back_forward') document.documentElement.dataset.intro = 'skip';
+      })();
+    </script>
     <meta name="theme-color" content="#f6f0e7">
     <meta name="description" content="Collari, guinzagli e accessori per cani fatti a mano su richiesta a Como. Scegli colori, materiali e dettagli con Belinda: scrivile su WhatsApp per ordinare.">
     <!-- Anteprima GitHub: rimuovere noindex quando il sito definitivo sarà pubblicato su bbdogspearls.com. -->
@@ -52,8 +60,8 @@
       }
     </script>
     <link rel="preload" as="image" href="assets/images/guinzaglio-montagna.webp">
-    <link rel="stylesheet" href="styles.css?v=20261012-2">
-    <script src="script.js?v=20261012-1" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261012-3">
+    <script src="script.js?v=20261012-2" defer></script>
   </head>
   <body class="intro-active">
     <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
