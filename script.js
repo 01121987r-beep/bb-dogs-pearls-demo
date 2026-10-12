@@ -156,20 +156,18 @@ const photos = {
   'medagliette': 'Medagliette decorative per cani in varie forme e sfumature di blu'
 };
 
-const tabs = [...document.querySelectorAll('.product-tab')];
-const productPicker = document.querySelector('.product-picker');
-const productTrack = document.querySelector('#product-track');
-const pickerIndicator = document.querySelector('#product-scroll-indicator');
-const pickerIndicatorThumb = pickerIndicator.querySelector('span');
-const panel = document.querySelector('#product-panel');
+const productChoices = [...document.querySelectorAll('.product-choice')];
+const productDialog = document.querySelector('#product-dialog');
+const productClose = document.querySelector('#product-close');
 const productPhoto = document.querySelector('#product-photo');
 const productImage = document.querySelector('#product-image');
 const productDots = document.querySelector('#product-dots');
+const mobilePicker = window.matchMedia('(max-width: 760px)');
 let selectedProduct = 'collari-intrecciati';
 let currentSlide = 0;
 let carouselTimer;
-let carouselVisible = false;
 let carouselPaused = false;
+let lastProductChoice;
 
 function stopCarousel() {
   window.clearInterval(carouselTimer);
@@ -178,16 +176,16 @@ function stopCarousel() {
 
 function startCarousel() {
   stopCarousel();
-  if (!carouselVisible || carouselPaused || reducedMotion.matches || document.hidden) return;
-  carouselTimer = window.setInterval(() => showSlide((currentSlide + 1) % products[selectedProduct].gallery.length), 4200);
+  if (!productDialog.open || carouselPaused || reducedMotion.matches || document.hidden) return;
+  const gallery = products[selectedProduct].gallery;
+  if (gallery.length < 2) return;
+  carouselTimer = window.setInterval(() => showSlide((currentSlide + 1) % gallery.length), 4200);
 }
 
 function showSlide(index) {
-  const gallery = products[selectedProduct].gallery;
+  const photo = products[selectedProduct].gallery[index];
   currentSlide = index;
-  const photo = gallery[index];
   productImage.src = `assets/images/${photo}.webp`;
-  productPhoto.style.setProperty('--photo-background', `url("assets/images/${photo}.webp")`);
   productImage.alt = photos[photo];
   productDots.querySelectorAll('button').forEach((dot, dotIndex) => dot.setAttribute('aria-pressed', String(dotIndex === index)));
   productPhoto.classList.remove('is-changing');
@@ -211,226 +209,43 @@ function renderDots() {
   });
 }
 
-function selectProduct(tab, focus = false) {
-  const product = products[tab.dataset.product];
+function openProduct(choice) {
+  const product = products[choice.dataset.product];
   if (!product) return;
-  tabs.forEach(item => {
-    const selected = item === tab;
-    item.classList.toggle('is-active', selected);
-    item.setAttribute('aria-selected', String(selected));
-    item.tabIndex = selected ? 0 : -1;
-  });
-  productPicker.querySelectorAll('[data-carousel-copy]').forEach(item => {
-    item.classList.toggle('is-active', item.dataset.product === tab.dataset.product);
-  });
-  panel.setAttribute('aria-labelledby', tab.id);
+  selectedProduct = choice.dataset.product;
+  lastProductChoice = choice;
   document.querySelector('#product-overline').textContent = product.overline;
   document.querySelector('#product-title').textContent = product.title;
   document.querySelector('#product-description').textContent = product.description;
-  selectedProduct = tab.dataset.product;
   productPhoto.setAttribute('aria-label', `Fotografie: ${product.title}`);
   currentSlide = 0;
   renderDots();
   showSlide(0);
+  document.querySelector('#order-status').hidden = true;
+  productDialog.showModal();
+  document.body.classList.add('modal-open');
+  productClose.focus({ preventScroll: true });
   startCarousel();
-  panel.classList.remove('is-switching');
-  void panel.offsetWidth;
-  panel.classList.add('is-switching');
-  if (focus) tab.focus();
-  else if (mobilePicker.matches) {
-    const top = window.scrollY + panel.getBoundingClientRect().top - siteHeader.offsetHeight - 24;
-    window.scrollTo({ top, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
-  }
 }
 
-renderDots();
-if ('IntersectionObserver' in window) {
-  const carouselObserver = new IntersectionObserver(([entry]) => {
-    carouselVisible = entry.isIntersecting;
-    if (carouselVisible) startCarousel();
-    else stopCarousel();
-  }, { threshold: .15 });
-  carouselObserver.observe(productPhoto);
-} else {
-  carouselVisible = true;
-  startCarousel();
-}
+productChoices.forEach(choice => choice.addEventListener('click', () => openProduct(choice)));
+productClose.addEventListener('click', () => productDialog.close());
+productDialog.addEventListener('click', event => {
+  if (event.target !== productDialog) return;
+  const box = productDialog.getBoundingClientRect();
+  if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) productDialog.close();
+});
+productDialog.addEventListener('close', () => {
+  stopCarousel();
+  document.body.classList.remove('modal-open');
+  lastProductChoice?.focus({ preventScroll: true });
+});
 productPhoto.addEventListener('mouseenter', () => { carouselPaused = true; stopCarousel(); });
 productPhoto.addEventListener('mouseleave', () => { carouselPaused = false; startCarousel(); });
 productPhoto.addEventListener('focusin', () => { carouselPaused = true; stopCarousel(); });
 productPhoto.addEventListener('focusout', () => { carouselPaused = false; startCarousel(); });
 document.addEventListener('visibilitychange', startCarousel);
-
-const mobilePicker = window.matchMedia('(max-width: 760px)');
-let pickerCopies = [];
-let pickerCycleWidth = 0;
-let pickerVisible = false;
-let pickerPaused = false;
-let pickerResumeTimer;
-let pickerIndicatorTimer;
-let pickerDrag;
-let pickerPreventClick = false;
-
-function stopPickerCarousel() {
-  productPicker.classList.remove('is-running');
-}
-
-function normalizePickerScroll() {
-  if (!pickerCycleWidth) return;
-  if (productPicker.scrollLeft < pickerCycleWidth * .5) productPicker.scrollLeft += pickerCycleWidth;
-  if (productPicker.scrollLeft > pickerCycleWidth * 1.5) productPicker.scrollLeft -= pickerCycleWidth;
-}
-
-function updatePickerIndicator() {
-  if (!pickerCycleWidth) return;
-  const transform = getComputedStyle(productTrack).transform;
-  const animatedOffset = transform === 'none' ? 0 : -new DOMMatrixReadOnly(transform).m41;
-  const position = (((productPicker.scrollLeft + animatedOffset) % pickerCycleWidth) + pickerCycleWidth) % pickerCycleWidth;
-  pickerIndicatorThumb.style.left = `${position / pickerCycleWidth * 70}%`;
-}
-
-function showPickerIndicator() {
-  if (!mobilePicker.matches) return;
-  window.clearTimeout(pickerIndicatorTimer);
-  updatePickerIndicator();
-  pickerIndicator.classList.add('is-visible');
-}
-
-function hidePickerIndicator() {
-  window.clearTimeout(pickerIndicatorTimer);
-  pickerIndicatorTimer = window.setTimeout(() => pickerIndicator.classList.remove('is-visible'), 1300);
-}
-
-function startPickerCarousel() {
-  const shouldRun = pickerCycleWidth && pickerVisible && !pickerPaused && !reducedMotion.matches && !document.hidden;
-  productPicker.classList.toggle('is-running', Boolean(shouldRun));
-}
-
-function pausePickerCarousel(delay = 0) {
-  stopPickerCarousel();
-  window.clearTimeout(pickerResumeTimer);
-  pickerPaused = true;
-  if (delay) pickerResumeTimer = window.setTimeout(() => {
-    pickerPaused = false;
-    normalizePickerScroll();
-    startPickerCarousel();
-  }, delay);
-}
-
-function setupPickerCarousel() {
-  stopPickerCarousel();
-  productPicker.classList.remove('has-loop');
-  pickerCopies.forEach(copy => copy.remove());
-  pickerCopies = [];
-  pickerCycleWidth = 0;
-  pickerIndicator.classList.remove('is-visible');
-  const makeCopy = tab => {
-    const copy = tab.cloneNode(true);
-    copy.removeAttribute('id');
-    copy.removeAttribute('role');
-    copy.removeAttribute('aria-selected');
-    copy.removeAttribute('aria-controls');
-    copy.setAttribute('aria-hidden', 'true');
-    copy.setAttribute('tabindex', '-1');
-    copy.dataset.carouselCopy = '';
-    copy.addEventListener('click', () => {
-      selectProduct(tab);
-      pausePickerCarousel(2500);
-    });
-    pickerCopies.push(copy);
-    return copy;
-  };
-  const before = tabs.map(makeCopy);
-  const after = tabs.map(makeCopy);
-  productTrack.prepend(...before);
-  productTrack.append(...after);
-  pickerCycleWidth = tabs[0].offsetLeft - before[0].offsetLeft;
-  productPicker.style.setProperty('--picker-shift', `${-pickerCycleWidth}px`);
-  productPicker.style.setProperty('--picker-duration', `${pickerCycleWidth / 14}s`);
-  productPicker.scrollLeft = pickerCycleWidth;
-  productPicker.classList.add('has-loop');
-  updatePickerIndicator();
-  startPickerCarousel();
-}
-
-productPicker.addEventListener('scroll', () => {
-  normalizePickerScroll();
-  updatePickerIndicator();
-}, { passive: true });
-productPicker.addEventListener('pointerdown', event => {
-  pausePickerCarousel();
-  showPickerIndicator();
-  if (event.pointerType === 'mouse' && event.button === 0) {
-    pickerDrag = { id: event.pointerId, x: event.clientX, scrollLeft: productPicker.scrollLeft, moved: false };
-  }
-}, { passive: true });
-window.addEventListener('pointermove', event => {
-  if (!pickerDrag || event.pointerId !== pickerDrag.id) return;
-  const distance = event.clientX - pickerDrag.x;
-  if (!pickerDrag.moved && Math.abs(distance) < 6) return;
-  pickerDrag.moved = true;
-  productPicker.classList.add('is-dragging');
-  productPicker.scrollLeft = pickerDrag.scrollLeft - distance;
-}, { passive: true });
-window.addEventListener('pointerup', event => {
-  if (!pickerDrag || event.pointerId !== pickerDrag.id) return;
-  if (pickerDrag.moved) {
-    pickerPreventClick = true;
-    window.setTimeout(() => { pickerPreventClick = false; }, 0);
-  }
-  pickerDrag = undefined;
-  productPicker.classList.remove('is-dragging');
-  pausePickerCarousel(2500);
-}, { passive: true });
-window.addEventListener('pointercancel', event => {
-  if (!pickerDrag || event.pointerId !== pickerDrag.id) return;
-  pickerDrag = undefined;
-  productPicker.classList.remove('is-dragging');
-  pausePickerCarousel(2500);
-}, { passive: true });
-productPicker.addEventListener('click', event => {
-  if (!pickerPreventClick) return;
-  event.preventDefault();
-  event.stopImmediatePropagation();
-  pickerPreventClick = false;
-}, true);
-productPicker.addEventListener('dragstart', event => event.preventDefault());
-productPicker.addEventListener('pointerup', () => {
-  pausePickerCarousel(2500);
-  hidePickerIndicator();
-}, { passive: true });
-productPicker.addEventListener('pointercancel', () => {
-  pausePickerCarousel(2500);
-  hidePickerIndicator();
-}, { passive: true });
-productPicker.addEventListener('wheel', () => {
-  pausePickerCarousel(2500);
-  showPickerIndicator();
-  hidePickerIndicator();
-}, { passive: true });
-productPicker.addEventListener('focusin', () => pausePickerCarousel());
-productPicker.addEventListener('focusout', () => pausePickerCarousel(2500));
-mobilePicker.addEventListener('change', setupPickerCarousel);
-reducedMotion.addEventListener('change', startPickerCarousel);
-document.addEventListener('visibilitychange', startPickerCarousel);
-window.addEventListener('resize', () => {
-  if (pickerCopies.length) {
-    pickerCycleWidth = tabs[0].offsetLeft - pickerCopies[0].offsetLeft;
-    productPicker.style.setProperty('--picker-shift', `${-pickerCycleWidth}px`);
-    productPicker.style.setProperty('--picker-duration', `${pickerCycleWidth / 14}s`);
-  }
-}, { passive: true });
-if ('IntersectionObserver' in window) {
-  const pickerObserver = new IntersectionObserver(([entry]) => {
-    pickerVisible = entry.isIntersecting;
-    if (pickerVisible) startPickerCarousel();
-    else stopPickerCarousel();
-  }, { threshold: .15 });
-  pickerObserver.observe(productPicker);
-} else {
-  pickerVisible = true;
-}
-setupPickerCarousel();
+reducedMotion.addEventListener('change', startCarousel);
 
 const orderButton = document.querySelector('#order-button');
 const orderStatus = document.querySelector('#order-status');
@@ -481,21 +296,6 @@ infoForm?.addEventListener('submit', event => {
   if (!infoForm.reportValidity()) return;
   infoFormStatus.textContent = 'La richiesta è pronta. Per inviarla manca ancora l’indirizzo email di destinazione.';
   infoFormStatus.hidden = false;
-});
-
-tabs.forEach((tab, index) => {
-  tab.addEventListener('click', () => selectProduct(tab));
-  tab.addEventListener('keydown', event => {
-    let next;
-    if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-    if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
-    if (event.key === 'Home') next = 0;
-    if (event.key === 'End') next = tabs.length - 1;
-    if (next !== undefined) {
-      event.preventDefault();
-      selectProduct(tabs[next], true);
-    }
-  });
 });
 
 const reveals = document.querySelectorAll('.reveal');
